@@ -1,0 +1,41 @@
+services:
+  database:
+    image: postgres:15
+    container_name: wpoms-database
+    environment:
+      POSTGRES_DB: wpoms-home
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  backend:
+    build: ./wpoms_admin
+    container_name: wpoms-backend
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/wpoms-home
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SERVER_PORT=8081
+    depends_on:
+      - database
+    restart: unless-stopped
+
+  frontend:
+    build: ./wpoms_web
+    container_name: wpoms-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8081
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
