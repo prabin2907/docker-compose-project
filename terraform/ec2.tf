@@ -25,14 +25,7 @@ resource "aws_instance" "my_ec2" {
   vpc_security_group_ids      = [aws_security_group.allow_web_traffic.id]
   associate_public_ip_address = true
 
-  user_data = <<-EOF
-#!/bin/bash
-apt-get update
-apt-get install -y docker.io
-systemctl start docker
-systemctl enable docker
-usermod -aG docker ubuntu
-EOF
+  user_data = file("${path.module}/user_data.sh")
 
   tags = {
     Name = "terraform-ec2-p"

@@ -1,7 +1,7 @@
 variable "repositories" {
   default = {
-    frontend = "wpoms-frontend"
-    backend  = "wpoms-backend"
+    frontend = "wpoms-frontend-p"
+    backend  = "wpoms-backend-p"
   }
 }
 
