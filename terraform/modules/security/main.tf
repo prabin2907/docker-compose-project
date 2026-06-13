@@ -1,12 +1,13 @@
-resource "aws_security_group" "allow_web_traffic" {
-  name        = "allow-web-traffic"
-  description = "Allow web traffic (SSH, HTTP, HTTPS)"
+﻿resource "aws_security_group" "this" {
+  name        = var.name
+  description = var.description
+  vpc_id      = var.vpc_id
 
   ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = var.allowed_cidr_blocks
     description = "SSH access"
   }
 
@@ -14,7 +15,7 @@ resource "aws_security_group" "allow_web_traffic" {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = var.allowed_cidr_blocks
     description = "HTTP"
   }
 
@@ -22,7 +23,7 @@ resource "aws_security_group" "allow_web_traffic" {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = var.allowed_cidr_blocks
     description = "HTTPS"
   }
 
@@ -35,6 +36,6 @@ resource "aws_security_group" "allow_web_traffic" {
   }
 
   tags = {
-    Name = "allow-web-traffic"
+    Name = var.name
   }
 }
